@@ -1,16 +1,13 @@
 
-El Stacko
-=========
+# El Stacko
 
 A simple test of a number of js libraries that will hopefully make a nice stack.
 
-Install
-=======
+# Install
 
 `npm install`
 
-Run
-===
+# Run
 
 gulp && ./run
 
