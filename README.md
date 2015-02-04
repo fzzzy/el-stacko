@@ -9,5 +9,5 @@ A simple test of a number of js libraries that will hopefully make a nice stack.
 
 # Run
 
-gulp && ./run
+`gulp && ./run`
 
