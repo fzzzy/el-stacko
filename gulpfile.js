@@ -9,7 +9,7 @@ gulp.task("6to5", function () {
 });
 
 gulp.task("sass", function () {
-  return gulp.src("src/**/*.scss").pipe(sass()).pipe(gulp.dest("dist"));
+  return gulp.src("src/**/*.scss").pipe(sass()).pipe(gulp.dest("dist/css"));
 });
 
 gulp.task("default", ["sass", "6to5"]);

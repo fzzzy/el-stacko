@@ -21,7 +21,7 @@ server.route({
     for (var s of foo()) {
       output += s + " ";
     }
-    reply("<!DOCTYPE html><html><head><title>Hello</title><link href=/styles.css rel=stylesheet></head><body>" + output + "</body></html>");
+    reply("<!DOCTYPE html><html><head><title>Hello</title><link href=/css/styles.css rel=stylesheet></head><body>" + output + "</body></html>");
   }
 });
 
@@ -36,8 +36,12 @@ server.route({
 
 server.route({
   method: "GET",
-  path: "/styles.css",
-  handler: (request, reply) => reply.file("dist/styles.css")
+  path: "/css/{param*}",
+  handler: {
+    directory: {
+      path: "dist/css"
+    }
+  }
 });
 
 // Start the server
