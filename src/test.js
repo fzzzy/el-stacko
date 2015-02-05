@@ -10,16 +10,13 @@ function* foo() {
 
 // Create a server with a host and port
 var server = new hapi.Server();
-server.connection({
-  host: "localhost",
-  port: 8080
-});
+server.connection({host: "localhost", port: 8080});
 
 // Add the route
 server.route({
   method: "GET",
   path: "/",
-  handler: function (request, reply) {
+  handler: (request, reply) => {
     let output = "";
     for (var s of foo()) {
       output += s + " ";
@@ -31,7 +28,7 @@ server.route({
 server.route({
   method: "GET",
   path: "/react",
-  handler: function (request, reply) {
+  handler: (request, reply) => {
     let r = require("./testreact.jsx");
     reply(react.renderToString(r.foo()));
   }
@@ -40,10 +37,7 @@ server.route({
 server.route({
   method: "GET",
   path: "/styles.css",
-  handler: function (request, reply) {
-    console.log("styles");
-    reply.file("dist/styles.css");
-  }
+  handler: (request, reply) => reply.file("dist/styles.css")
 });
 
 // Start the server
