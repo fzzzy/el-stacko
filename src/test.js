@@ -4,6 +4,8 @@ let React = require("react"),
 
 let MainBody = body.MainBody;
 
+let greeting = "Hello, World";
+
 exports.test = React.createClass({
   render: function () {
     return <html>
@@ -11,13 +13,21 @@ exports.test = React.createClass({
         <title>
           Hello, World
         </title>
+        <script src="/js/bundle.js"></script>
         <link rel="stylesheet" href="/css/styles.css"></link>
       </head>
       <body>
-        <MainBody greeting="Hello, World" />
+        <MainBody greeting={greeting} />
       </body>
     </html>;
   }
 });
+
+try {
+  window.React = React;
+  window.MainBody = MainBody;
+} catch (e) {
+  
+}
 
 
