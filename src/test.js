@@ -14,7 +14,7 @@ exports.test = React.createClass({
         <link rel="stylesheet" href="/css/styles.css"></link>
       </head>
       <body>
-        <MainBody />
+        <MainBody greeting="Hello, World" />
       </body>
     </html>;
   }
