@@ -2,5 +2,4 @@
 
 require("6to5/polyfill");
 
-require("./dist/test.js");
-
+require("./dist/server.js");
