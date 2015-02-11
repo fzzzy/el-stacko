@@ -2,10 +2,10 @@
 
 let React = require("react");
 
-exports.Body = React.createClass({
+exports.Another = React.createClass({
   render: function () {
     return <h1>
-      {this.props.greeting}
+      {this.props.greeting}, what up
     </h1>;
   }
 });

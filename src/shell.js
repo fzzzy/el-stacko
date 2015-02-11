@@ -5,7 +5,7 @@ let React = require("react"),
   Link = Router.Link,
   RouteHandler = Router.RouteHandler;
 
-exports.test = React.createClass({
+exports.Shell = React.createClass({
   render: function () {
     return <html>
       <head>
@@ -26,7 +26,7 @@ exports.test = React.createClass({
 
 try {
   window.React = React;
-  window.test = exports.test;
+  window.Shell = exports.Shell;
 } catch (e) {
   
 }
