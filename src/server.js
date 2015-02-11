@@ -21,7 +21,7 @@ server.route({
 
     let header = output.slice(0, end_index),
         footer = output.slice(end_index),
-        script = "<script>React.render(React.createElement(MainBody, {greeting: 'Hello, client-side World'}), document.body);</script>";
+        script = "<script>React.render(React.createElement(test, {greeting: 'Hello, World'}), document);</script>";
 
     reply(header + script + footer);
   }

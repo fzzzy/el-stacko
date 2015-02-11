@@ -25,7 +25,7 @@ exports.test = React.createClass({
 
 try {
   window.React = React;
-  window.MainBody = MainBody;
+  window.test = exports.test;
 } catch (e) {
   
 }
