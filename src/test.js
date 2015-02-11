@@ -1,10 +1,8 @@
 
+
 let React = require("react"),
-  body = require("./body.js");
-
-let MainBody = body.MainBody;
-
-let greeting = "Hello, World";
+  Router = require("react-router"),
+  RouteHandler = Router.RouteHandler;
 
 exports.test = React.createClass({
   render: function () {
@@ -17,7 +15,7 @@ exports.test = React.createClass({
         <link rel="stylesheet" href="/css/styles.css"></link>
       </head>
       <body>
-        <MainBody greeting={greeting} />
+        <RouteHandler greeting="Hello" />
       </body>
     </html>;
   }

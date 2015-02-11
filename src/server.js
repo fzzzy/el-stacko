@@ -1,54 +1,35 @@
 
 
-let hapi = require("hapi"),
+let http = require("http"),
+  path = require('path'),
+  url = require('url'),
+  fs = require('fs'),
   React = require("react"),
-  test = require("./test.js");
+  Router = require("react-router"),
+  routes = require("./routes.js");
 
-let footer = "</body></html>",
-  footer_length = footer.length;
+let server = http.createServer(function (req, res) {
+  let pth = url.parse(req.url).pathname;
 
-// Create a server with a host and port
-let server = new hapi.Server();
-server.connection({host: "localhost", port: 8080});
-
-// Add the route
-server.route({
-  method: "GET",
-  path: "/",
-  handler: (request, reply) => {
-    let output = React.renderToString(React.createElement(test.test)),
-        end_index = output.length - footer_length;
-
-    let header = output.slice(0, end_index),
-        footer = output.slice(end_index),
-        script = "<script>React.render(React.createElement(test, {greeting: 'Hello, World'}), document);</script>";
-
-    reply(header + script + footer);
+  if (pth.indexOf("/js/") === 0 || pth.indexOf("/css/") === 0) {
+    let filename = path.join(__dirname, pth);
+    fs.exists(filename, function(exists) {
+      if (exists) {
+        fs.createReadStream(filename).pipe(res);
+      } else {
+        res.writeHead(404); res.end("Not Found");
+      }
+    });
+    return;
   }
+
+  Router.run(routes.routes, req.url, function (Handler, state) {
+    let response = React.renderToString(<Handler />);
+    res.end(response);
+  });
 });
 
-server.route({
-  method: "GET",
-  path: "/css/{param*}",
-  handler: {
-    directory: {
-      path: "dist/css"
-    }
-  }
-});
-
-server.route({
-  method: "GET",
-  path: "/js/bundle.js",
-  handler: {
-    file: {
-      path: "dist/js/bundle.js"
-    }
-  }
-});
-
-// Start the server
-server.start();
+server.listen(8080);
 console.log("server listening on http://localhost:8080/")
 
 
