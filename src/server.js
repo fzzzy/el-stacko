@@ -8,16 +8,21 @@ let http = require("http"),
   Router = require("react-router"),
   routes = require("./routes.js");
 
+const jspath = "/js/",
+  csspath = "/css/",
+  favicopath = "/favicon.ico",
+  NOT_FOUND = "Not Found";
+
 let server = http.createServer(function (req, res) {
   let pth = url.parse(req.url).pathname;
 
-  if (pth.indexOf("/js/") === 0 || pth.indexOf("/css/") === 0) {
+  if (pth.indexOf(jspath) === 0 || pth.indexOf(csspath) === 0 || pth === favicopath) {
     let filename = path.join(__dirname, pth);
     fs.exists(filename, function(exists) {
       if (exists) {
         fs.createReadStream(filename).pipe(res);
       } else {
-        res.writeHead(404); res.end("Not Found");
+        res.writeHead(404); res.end(NOT_FOUND);
       }
     });
     return;

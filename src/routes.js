@@ -14,9 +14,9 @@ var Another = React.createClass({
 });
 
 exports.routes = (
-  <Route name="app" path="/" handler={Test.test}>
+  <Route path="/" handler={Test.test}>
     <Route name="another" handler={Another} />
-    <DefaultRoute handler={Body.body} />
+    <DefaultRoute name="app" handler={Body.body} />
   </Route>
 );
 

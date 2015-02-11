@@ -1,9 +1,17 @@
 
 
 $primary-color: #cdcdcd;
+$highlight-color: green;
 
 body {
   background-color: $primary-color;
+  box-sizing: border-box;
 }
 
+a {
+  padding: 1em;
+}
 
+.active {
+  border-bottom: 1px solid $highlight-color;
+}
