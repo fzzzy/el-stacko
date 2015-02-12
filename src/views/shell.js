@@ -18,7 +18,7 @@ exports.Shell = React.createClass({
       <body>
         <Link to="app">Home</Link>
         <Link to="another">Another</Link>
-        <RouteHandler />
+        <RouteHandler greeting={this.props.greeting} />
       </body>
     </html>;
   }
