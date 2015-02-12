@@ -4,9 +4,9 @@ let React = require("react"),
   Router = require("react-router"),
   Route = Router.Route,
   DefaultRoute = Router.DefaultRoute,
-  shell = require("./shell.js"),
-  another = require("./another.js"),
-  body = require("./body.js");
+  shell = require("./views/shell.js"),
+  another = require("./views/another.js"),
+  body = require("./views/body.js");
 
 exports.routes = (
   <Route path="/" handler={shell.Shell}>
