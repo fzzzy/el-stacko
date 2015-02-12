@@ -1,11 +1,18 @@
 
 
-function get_some_state() {
+function app(state) {
   return new Promise(function (resolve, reject) {
     resolve({greeting: "hi there"});
   });
 }
 
-exports.get_some_state = get_some_state;
+function another(state) {
+  return new Promise(function (resolve, reject) {
+    resolve({greeting: "how are you"});
+  });
+}
+
+exports.app = app;
+exports.another = another;
 
 

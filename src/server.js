@@ -47,7 +47,16 @@ let server = http.createServer(function (req, res) {
   }
 
   Router.run(routes.routes, req.url, function (Handler, state) {
-    models.get_some_state().then(function(data) {
+    let appname = "";
+    for (let r of state.routes) {
+      if (r.name) {
+        appname = r.name;
+        break;
+      }
+    }
+
+    models[appname](state).then(function(data) {
+      console.log("got data", data);
       let response = React.renderToString(<Handler {...data} />),
         footer_index = response.indexOf(footer),
         header = response.slice(0, footer_index);
