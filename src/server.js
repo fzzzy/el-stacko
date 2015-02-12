@@ -10,9 +10,16 @@ let http = require("http"),
   models = require("./models.js");
 
 const jspath = "/js/",
+  jsext = ".js",
   csspath = "/css/",
+  cssext = ".css",
   favicopath = "/favicon.ico",
-  NOT_FOUND = "Not Found",
+  favicoext = ".ico",
+  content_type = "Content-type",
+  jstype = "application/javascript",
+  csstype = "text/css",
+  favicotype = "image/x-icon",
+  not_found = "Not Found",
   footer = "</body></html>",
   script_head = "<script>Router.run(routes.routes, Router.HistoryLocation, function (Handler, state) { React.render(React.createElement(Handler, ",
   script_foot = "), document) });</script>";
@@ -24,16 +31,16 @@ let server = http.createServer(function (req, res) {
     let filename = path.join(__dirname, pth);
     fs.exists(filename, function(exists) {
       if (exists) {
-        if (filename.endsWith('.js')) {
-          res.setHeader("Content-type", "application/javascript");
-        } else if (filename.endsWith('.css')) {
-          res.setHeader("Content-type", "text/css");
-        } else if (filename.endsWith('.ico')) {
-          res.setHeader("Content-type", "image/x-icon");
+        if (filename.endsWith(jsext)) {
+          res.setHeader(content_type, jstype);
+        } else if (filename.endsWith(cssext)) {
+          res.setHeader(content_type, csstype);
+        } else if (filename.endsWith(favicoext)) {
+          res.setHeader(content_type, favicotype);
         }
         fs.createReadStream(filename).pipe(res);
       } else {
-        res.writeHead(404); res.end(NOT_FOUND);
+        res.writeHead(404); res.end(not_found);
       }
     });
     return;
