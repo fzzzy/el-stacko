@@ -55,6 +55,9 @@ let server = http.createServer(function (req, res) {
       }
     }
 
+    if (appname === '') {
+      res.writeHead(404); return res.end(not_found);
+    }
     models[appname](state).then(function(data) {
       console.log("got data", data);
       let response = React.renderToString(<Handler {...data} />),
