@@ -16,3 +16,14 @@ exports.routes = (
 );
 
 
+
+try {
+  window.React = React;
+  window.shell = shell;
+  window.Router = Router;
+  window.routes = exports;
+} catch (e) {
+  
+}
+
+

@@ -16,7 +16,7 @@ gulp.task("sass", function () {
 
 gulp.task("javascript", ["6to5"], function () {
   var bundler = browserify({
-    entries: ["./dist/test.js"],
+    entries: ["./dist/routes.js"],
     debug: true
   });
 

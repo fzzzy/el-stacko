@@ -18,17 +18,10 @@ exports.Shell = React.createClass({
       <body>
         <Link to="app">Home</Link>
         <Link to="another">Another</Link>
-        <RouteHandler greeting="Hello" />
+        <RouteHandler />
       </body>
     </html>;
   }
 });
-
-try {
-  window.React = React;
-  window.Shell = exports.Shell;
-} catch (e) {
-  
-}
 
 

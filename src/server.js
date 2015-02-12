@@ -11,7 +11,8 @@ let http = require("http"),
 const jspath = "/js/",
   csspath = "/css/",
   favicopath = "/favicon.ico",
-  NOT_FOUND = "Not Found";
+  NOT_FOUND = "Not Found",
+  footer = "</body></html>";
 
 let server = http.createServer(function (req, res) {
   let pth = url.parse(req.url).pathname;
@@ -29,8 +30,13 @@ let server = http.createServer(function (req, res) {
   }
 
   Router.run(routes.routes, req.url, function (Handler, state) {
-    let response = React.renderToString(<Handler />);
-    res.end(response);
+    let response = React.renderToString(<Handler />),
+      footer_index = response.indexOf(footer),
+      header = response.slice(0, footer_index);
+
+    let script = "<script>Router.run(routes.routes, Router.HistoryLocation, function(Handler, state) { React.render(React.createElement(Handler), document) });</script>";
+
+    res.end(header + script + footer);
   });
 });
 
