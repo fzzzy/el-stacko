@@ -103,6 +103,7 @@ let server = http.createServer(function (req, res) {
         footer_index = response.indexOf(footer),
         header = response.slice(0, footer_index);
 
+      res.setHeader(content_type, "text/html; charset=utf-8");
       res.end(
         header +
         "<script>var cached_data = " + JSON.stringify(data) + ";" +
