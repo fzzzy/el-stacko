@@ -26,17 +26,15 @@ const jspath = "/js/",
   not_found = "Not Found",
   footer = "</body></html>",
   script = `
-function got_data(Handler, appname, data) {
-  console.log("got data", appname, data);
+function got_data(Handler, data) {
   React.render(React.createElement(Handler, data), document);
 }
 
 Router.run(routes.routes, Router.HistoryLocation, function (Handler, state) {
   if (cached_data) {
-    console.log("cached_data");
     var _d = cached_data;
     cached_data = null;
-    got_data(Handler, cached_appname, _d);
+    got_data(Handler, _d);
     return;
   }
   var appname = "";
@@ -47,8 +45,7 @@ Router.run(routes.routes, Router.HistoryLocation, function (Handler, state) {
     }
   }
   request.get("/models/" + appname).set("Accept", "application/json").end(function (r) {
-    console.log("reqget", r.body);
-    got_data(Handler, appname, r.body);
+    got_data(Handler, r.body);
   });
 });
 `;
@@ -56,7 +53,7 @@ Router.run(routes.routes, Router.HistoryLocation, function (Handler, state) {
 let server = http.createServer(function (req, res) {
   let pth = url.parse(req.url).pathname;
 
-  console.log(pth);
+  console.log(req.method, pth);
 
   if (pth.indexOf(jspath) === 0 || pth.indexOf(csspath) === 0 || pth === favicopath) {
     let filename = path.join(__dirname, pth);
@@ -80,7 +77,6 @@ let server = http.createServer(function (req, res) {
   if (pth.indexOf(modelspath) === 0) {
     let modelname = pth.slice(modelspath.length);
     models[modelname]().then(function (data) {
-      console.log("model", modelname);
       res.setHeader(content_type, jsontype);
       res.end(JSON.stringify(data));
     });
@@ -103,7 +99,6 @@ let server = http.createServer(function (req, res) {
     }
 
     models[appname]().then(function (data) {
-      console.log("got data", data);
       let response = React.renderToString(<Handler {...data} />),
         footer_index = response.indexOf(footer),
         header = response.slice(0, footer_index);
@@ -111,7 +106,6 @@ let server = http.createServer(function (req, res) {
       res.end(
         header +
         "<script>var cached_data = " + JSON.stringify(data) + ";" +
-        "var cached_appname = " + JSON.stringify(appname) + ";" +
         script +
         "</script>" +
         footer);

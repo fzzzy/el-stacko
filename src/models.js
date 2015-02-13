@@ -16,7 +16,6 @@ db.serialize(function() {
 function app() {
   return new Promise(function (resolve, reject) {
     db.all("SELECT * FROM posts", function(err, rows) {
-      console.log(rows);
       resolve({body: rows[0].body});
     });
   });
