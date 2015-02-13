@@ -1,6 +1,7 @@
 
 
-let React = require("react"),
+let request = require("superagent"),
+  React = require("react"),
   Router = require("react-router"),
   Route = Router.Route,
   DefaultRoute = Router.DefaultRoute,
@@ -15,13 +16,12 @@ exports.routes = (
   </Route>
 );
 
-
-
 try {
   window.React = React;
   window.shell = shell;
   window.Router = Router;
   window.routes = exports;
+  window.request = request;
 } catch (e) {
   
 }

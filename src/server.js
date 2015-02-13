@@ -7,11 +7,13 @@ let http = require("http"),
   React = require("react"),
   Router = require("react-router"),
   routes = require("./routes.js"),
-  models = require("./models.js");
+  models = require("./models.js"),
+  request = require("superagent");
 
 const jspath = "/js/",
   jsext = ".js",
   csspath = "/css/",
+  modelspath = "/models/",
   cssext = ".css",
   favicopath = "/favicon.ico",
   favicoext = ".ico",
@@ -19,13 +21,42 @@ const jspath = "/js/",
   jstype = "application/javascript",
   csstype = "text/css",
   favicotype = "image/x-icon",
+  jsontype = "application/json",
+  accept = "Accept",
   not_found = "Not Found",
   footer = "</body></html>",
-  script_head = "<script>Router.run(routes.routes, Router.HistoryLocation, function (Handler, state) { React.render(React.createElement(Handler, ",
-  script_foot = "), document) });</script>";
+  script = `
+function got_data(Handler, appname, data) {
+  console.log("got data", appname, data);
+  React.render(React.createElement(Handler, data), document);
+}
+
+Router.run(routes.routes, Router.HistoryLocation, function (Handler, state) {
+  if (cached_data) {
+    console.log("cached_data");
+    var _d = cached_data;
+    cached_data = null;
+    got_data(Handler, cached_appname, _d);
+    return;
+  }
+  var appname = "";
+  for (var i in state.routes) {
+    if (state.routes[i].name) {
+      appname = state.routes[i].name;
+      break;
+    }
+  }
+  request.get("/models/" + appname).set("Accept", "application/json").end(function (r) {
+    console.log("reqget", r.body);
+    got_data(Handler, appname, r.body);
+  });
+});
+`;
 
 let server = http.createServer(function (req, res) {
   let pth = url.parse(req.url).pathname;
+
+  console.log(pth);
 
   if (pth.indexOf(jspath) === 0 || pth.indexOf(csspath) === 0 || pth === favicopath) {
     let filename = path.join(__dirname, pth);
@@ -46,6 +77,16 @@ let server = http.createServer(function (req, res) {
     return;
   }
 
+  if (pth.indexOf(modelspath) === 0) {
+    let modelname = pth.slice(modelspath.length);
+    models[modelname]().then(function (data) {
+      console.log("model", modelname);
+      res.setHeader(content_type, jsontype);
+      res.end(JSON.stringify(data));
+    });
+    return;
+  }
+
   Router.run(routes.routes, req.url, function (Handler, state) {
     let appname = "";
     for (let r of state.routes) {
@@ -56,15 +97,24 @@ let server = http.createServer(function (req, res) {
     }
 
     if (appname === '') {
-      res.writeHead(404); return res.end(not_found);
+      res.writeHead(404);
+      res.end(not_found);
+      return;
     }
-    models[appname](state).then(function(data) {
+
+    models[appname]().then(function (data) {
       console.log("got data", data);
       let response = React.renderToString(<Handler {...data} />),
         footer_index = response.indexOf(footer),
         header = response.slice(0, footer_index);
 
-      res.end(header + script_head + JSON.stringify(data) + script_foot + footer);
+      res.end(
+        header +
+        "<script>var cached_data = " + JSON.stringify(data) + ";" +
+        "var cached_appname = " + JSON.stringify(appname) + ";" +
+        script +
+        "</script>" +
+        footer);
     })
   });
 });
