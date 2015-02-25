@@ -27,7 +27,16 @@ function another() {
   });
 }
 
+function post(state) {
+  return new Promise(function (resolve, reject) {
+    var q = db.prepare("SELECT * FROM posts WHERE id = $id");
+    q.get(state.postId, function (err, row) {
+      resolve(row);
+    });
+  });
+}
+
 exports.app = app;
 exports.another = another;
-
+exports.post = post;
 

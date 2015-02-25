@@ -86,13 +86,13 @@ let server = http.createServer(function (req, res) {
       }
     }
 
-    if (appname === '') {
+    if (appname === '' || models[appname] === undefined) {
       res.writeHead(404);
       res.end(not_found);
       return;
     }
 
-    models[appname]().then(function (data) {
+    models[appname](state.params).then(function (data) {
       let response = React.renderToString(<Handler {...data} />),
         footer_index = response.indexOf(footer),
         header = response.slice(0, footer_index);
