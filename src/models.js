@@ -4,9 +4,9 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database(':memory:');
 
 db.serialize(function() {
-  db.run("CREATE TABLE posts (title TEXT, body TEXT, tags TEXT)");
+  db.run("CREATE TABLE posts (id INTEGER PRIMARY KEY, title TEXT, body TEXT, tags TEXT)");
 
-  var stmt = db.prepare("INSERT INTO posts VALUES ($title, $body, $tags)");
+  var stmt = db.prepare("INSERT INTO posts VALUES (null, $title, $body, $tags)");
   for (var i = 0; i < 10; i++) {
     stmt.run("Test title " + i, "Test body " + i, "#yolo");
   }
@@ -16,7 +16,7 @@ db.serialize(function() {
 function app() {
   return new Promise(function (resolve, reject) {
     db.all("SELECT * FROM posts", function(err, rows) {
-      resolve({body: rows[0].body});
+      resolve({posts: rows});
     });
   });
 }

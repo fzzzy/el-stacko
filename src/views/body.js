@@ -1,12 +1,18 @@
 
 
-let React = require("react");
+let React = require("react"),
+  post = require("./post.js");
+
 
 exports.Body = React.createClass({
   render: function () {
-    return <h1>
-      {this.props.body}
-    </h1>;
+    let posts = [];
+    for (let p of this.props.posts) {
+      posts.push(<post.Post key={p.id} {...p} />);
+    }
+    return <span>
+      {posts}
+    </span>
   }
 });
 
