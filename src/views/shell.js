@@ -18,6 +18,10 @@ exports.Shell = React.createClass({
       <body>
         <Link to="app">Home</Link>
         <Link to="another">Another</Link>
+        <form action="/tag" method="GET">
+          <input name="name" />
+          <button>Tag Search</button>
+        </form>
         <RouteHandler {...this.props} />
       </body>
     </html>;
