@@ -37,13 +37,7 @@ Router.run(routes.routes, Router.HistoryLocation, function (Handler, state) {
     got_data(Handler, _d);
     return;
   }
-  var appname = "";
-  for (var i in state.routes) {
-    if (state.routes[i].name) {
-      appname = state.routes[i].name;
-      break;
-    }
-  }
+  var appname = state.routes.filter(function (r) { return !!r.name })[0].name;
   request.get("/models/" + appname).set("Accept", "application/json").end(function (r) {
     got_data(Handler, r.body);
   });
