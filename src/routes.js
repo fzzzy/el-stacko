@@ -13,7 +13,7 @@ let request = require("superagent"),
 exports.routes = (
   <Route path="/" handler={shell.Shell}>
     <Route name="another" handler={another.Another} />
-    <Route name="post" path="posts/:postId" handler={post.Post} />
+    <Route name="post" path="post/:postId" handler={post.Post} />
     <DefaultRoute name="app" handler={body.Body} />
   </Route>
 );
