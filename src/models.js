@@ -7,8 +7,8 @@ db.serialize(function() {
   let tag = "#yolo";
   db.run("CREATE TABLE posts (id INTEGER PRIMARY KEY, title TEXT, body TEXT, tags TEXT)");
 
-  var stmt = db.prepare("INSERT INTO posts VALUES (null, $title, $body, $tags)");
-  for (var i = 1; i < 11; i++) {
+  let stmt = db.prepare("INSERT INTO posts VALUES (null, $title, $body, $tags)");
+  for (let i = 1; i < 11; i++) {
     stmt.run("Test title " + i, "Test body " + i, tag);
     if (tag === "#yolo") {
       tag = "#asdf";
@@ -35,8 +35,10 @@ function another() {
 
 function post(state) {
   return new Promise(function (resolve, reject) {
-    var q = db.prepare("SELECT * FROM posts WHERE id = $id");
-    q.get(state.params.postId, function (err, row) {
+    let q = db.prepare("SELECT * FROM posts WHERE id = $id"),
+      pth = state.query.path && state.query.path || state.path,
+      pathsplit = pth.split("/");
+    q.get( pathsplit[pathsplit.length - 1], function (err, row) {
       resolve(row);
     });
   });
@@ -44,7 +46,7 @@ function post(state) {
 
 function tag(state) {
   return new Promise(function (resolve, reject) {
-    var q = db.prepare("SELECT * FROM posts WHERE tags LIKE $match");
+    let q = db.prepare("SELECT * FROM posts WHERE tags LIKE $match");
     q.all("%" + state.query.name + "%", function (err, rows) {
       resolve({tag: state.query.name, posts: rows});
     });

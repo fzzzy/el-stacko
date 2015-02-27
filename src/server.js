@@ -37,17 +37,24 @@ Router.run(routes.routes, Router.HistoryLocation, function (Handler, state) {
     got_data(Handler, _d);
     return;
   }
+
   var appname = state.routes.filter(function (r) { return !!r.name })[0].name;
-  request.get("/models/" + appname).set("Accept", "application/json").end(function (r) {
+  request.get(
+    url.format({pathname: modelspath + appname, query: {path: state.path, query: state.query}})
+  ).set(
+    "Accept", "application/json"
+  ).end(function (r) {
     got_data(Handler, r.body);
   });
 });
 `;
 
 let server = http.createServer(function (req, res) {
-  let pth = url.parse(req.url).pathname;
+  let parsed = url.parse(req.url, true),
+    pth = parsed.pathname,
+    query = parsed.query;
 
-  console.log(req.method, pth);
+  console.log(req.method, pth, query);
 
   if (pth.indexOf(jspath) === 0 || pth.indexOf(csspath) === 0 || pth === favicopath) {
     let filename = path.join(__dirname, pth);
@@ -70,7 +77,7 @@ let server = http.createServer(function (req, res) {
 
   if (pth.indexOf(modelspath) === 0) {
     let modelname = pth.slice(modelspath.length);
-    models[modelname]().then(function (data) {
+    models[modelname]({path: query.path, query: query.query}).then(function (data) {
       res.setHeader(content_type, jsontype);
       res.end(JSON.stringify(data));
     });
