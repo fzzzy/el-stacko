@@ -93,17 +93,22 @@ let server = http.createServer(function (req, res) {
     }
 
     models[appname](state).then(function (data) {
-      let response = React.renderToString(<Handler {...data} />),
-        footer_index = response.indexOf(footer),
-        header = response.slice(0, footer_index);
-
-      res.setHeader(content_type, "text/html; charset=utf-8");
-      res.end(
-        header +
-        "<script>var cached_data = " + JSON.stringify(data) + ";" +
-        script +
-        "</script>" +
-        footer);
+      try {
+        let response = React.renderToString(<Handler {...data} />),
+          footer_index = response.indexOf(footer),
+          header = response.slice(0, footer_index);
+  
+        res.setHeader(content_type, "text/html; charset=utf-8");
+        res.end(
+          header +
+          "<script>var cached_data = " + JSON.stringify(data) + ";" +
+          script +
+          "</script>" +
+          footer);
+      } catch (e) {
+        res.setHeader(content_type, "text/plain; charset=utf-8");
+        res.end(e.stack);
+      }
     })
   });
 });
