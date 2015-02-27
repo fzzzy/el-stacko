@@ -4,16 +4,16 @@ let sqlite3 = require('sqlite3').verbose(),
  db = new sqlite3.Database(':memory:');
 
 db.serialize(function() {
-  let tag = "#yolo";
+  let tag = "yolo";
   db.run("CREATE TABLE posts (id INTEGER PRIMARY KEY, title TEXT, body TEXT, tags TEXT)");
 
   let stmt = db.prepare("INSERT INTO posts VALUES (null, $title, $body, $tags)");
   for (let i = 1; i < 11; i++) {
     stmt.run("Test title " + i, "Test body " + i, tag);
-    if (tag === "#yolo") {
-      tag = "#asdf";
+    if (tag === "yolo") {
+      tag = "asdf";
     } else {
-      tag = "#yolo";
+      tag = "yolo";
     }
   }
   stmt.finalize();

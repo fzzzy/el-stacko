@@ -39,8 +39,14 @@ Router.run(routes.routes, Router.HistoryLocation, function (Handler, state) {
   }
 
   var appname = state.routes.filter(function (r) { return !!r.name })[0].name;
+  var querystring = "";
+  for (var n in state.query) {
+    querystring += n + "=" + state.query[n] + "&";
+  }
+  querystring = querystring.slice(0, querystring.length - 1);
+  console.log("path query", state.pathname, querystring);
   request.get(
-    url.format({pathname: modelspath + appname, query: {path: state.path, query: state.query}})
+    url.format({pathname: "/models/" + appname, query: {path: state.pathname, query: querystring}})
   ).set(
     "Accept", "application/json"
   ).end(function (r) {
@@ -77,7 +83,8 @@ let server = http.createServer(function (req, res) {
 
   if (pth.indexOf(modelspath) === 0) {
     let modelname = pth.slice(modelspath.length);
-    models[modelname]({path: query.path, query: query.query}).then(function (data) {
+    let subpath = url.parse(query.path + "?" + query.query, true);
+    models[modelname]({path: subpath.pathname, query: subpath.query}).then(function (data) {
       res.setHeader(content_type, jsontype);
       res.end(JSON.stringify(data));
     });

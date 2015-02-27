@@ -9,7 +9,8 @@ let request = require("superagent"),
   another = require("./views/another.js"),
   body = require("./views/body.js"),
   post = require("./views/post.js"),
-  tag = require("./views/tag.js");
+  tag = require("./views/tag.js"),
+  url = require("url");
 
 
 exports.routes = (
@@ -27,6 +28,7 @@ try {
   window.Router = Router;
   window.routes = exports;
   window.request = request;
+  window.url = url;
 } catch (e) {
   
 }
