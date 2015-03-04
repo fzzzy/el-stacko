@@ -62,7 +62,7 @@ let server = http.createServer(function (req, res) {
 
   console.log(req.method, pth, query);
 
-  if (pth.indexOf(jspath) === 0 || pth.indexOf(csspath) === 0 || pth === favicopath) {
+  if (req.method === "GET" && (pth.indexOf(jspath) === 0 || pth.indexOf(csspath) === 0 || pth === favicopath)) {
     let filename = path.join(__dirname, pth);
     fs.exists(filename, function(exists) {
       if (exists) {
@@ -83,30 +83,48 @@ let server = http.createServer(function (req, res) {
 
   if (pth.indexOf(modelspath) === 0) {
     let modelname = pth.slice(modelspath.length);
-    let subpath = url.parse(query.path + "?" + query.query, true);
-    models[modelname]({path: subpath.pathname, query: subpath.query}).then(function (data) {
-      res.setHeader(content_type, jsontype);
-      res.end(JSON.stringify(data));
+    let subpath = {};
+    if (query.path === undefined) {
+      subpath.pathname = pth;
+      subpath.query = {};
+    } else {
+      subpath = url.parse(query.path + "?" + query.query, true);
+    }
+    let body = "";
+    req.on('data', function(chunk) {
+      body = body + chunk;
+    });
+    req.on('end', function() {
+      if (body.length && body[0] === "{") {
+        body = JSON.parse(body);
+      }
+      models[modelname](
+        {method: req.method,
+          path: subpath.pathname,
+          query: subpath.query,
+          body: body}
+      ).then(function (data) {
+        res.setHeader(content_type, jsontype);
+        res.end(JSON.stringify(data));
+      });
     });
     return;
   }
 
   Router.run(routes.routes, req.url, function (Handler, state) {
-    let appname = "";
-    for (let r of state.routes) {
-      if (r.name) {
-        appname = r.name;
-        break;
-      }
-    }
+    let appnames = state.routes.filter((r) => !!r.name);
 
-    if (appname === '' || models[appname] === undefined) {
+    if (appnames.length === 0 || models[appnames[0].name] === undefined) {
       res.writeHead(404);
       res.end(not_found);
       return;
     }
 
-    models[appname](state).then(function (data) {
+    models[appnames[0].name](
+      {method: req.method,
+        path: state.path,
+        query: state.query}
+    ).then(function (data) {
       try {
         let response = React.renderToString(<Handler {...data} />),
           footer_index = response.indexOf(footer),

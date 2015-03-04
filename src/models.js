@@ -19,7 +19,7 @@ db.serialize(function() {
   stmt.finalize();
 });
 
-function app() {
+exports.app = function app() {
   return new Promise(function (resolve, reject) {
     db.all("SELECT * FROM posts", function (err, rows) {
       resolve({posts: rows});
@@ -27,13 +27,28 @@ function app() {
   });
 }
 
-function another() {
-  return new Promise(function (resolve, reject) {
-    resolve({greeting: "how are you"});
-  });
+exports.newpost = function newpost(state) {
+  console.log("newpost", state);
+  if (state.method === "GET") {
+    return new Promise(function (resolve, reject) {
+      resolve({greeting: "how are you"});
+    });
+  } else if (state.method === "PUT") {
+    return new Promise(function (resolve, reject) {
+      let stmt = db.prepare("INSERT INTO posts VALUES (null, $title, $body, $tags)");
+      stmt.run(state.body.title, state.body.body, state.body.tags);
+      stmt.finalize(function () {
+        resolve({put: "ok"});
+      });
+    });
+  } else {
+    return new Promise(function(resolve, reject) {
+      reject();
+    });
+  }
 }
 
-function post(state) {
+exports.post = function post(state) {
   return new Promise(function (resolve, reject) {
     let q = db.prepare("SELECT * FROM posts WHERE id = $id"),
       pth = state.query.path && state.query.path || state.path,
@@ -44,7 +59,7 @@ function post(state) {
   });
 }
 
-function tag(state) {
+exports.tag = function tag(state) {
   return new Promise(function (resolve, reject) {
     let q = db.prepare("SELECT * FROM posts WHERE tags LIKE $match");
     q.all("%" + state.query.name + "%", function (err, rows) {
@@ -53,7 +68,3 @@ function tag(state) {
   });
 }
 
-exports.app = app;
-exports.another = another;
-exports.post = post;
-exports.tag = tag;

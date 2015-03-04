@@ -6,7 +6,7 @@ let request = require("superagent"),
   Route = Router.Route,
   DefaultRoute = Router.DefaultRoute,
   shell = require("./views/shell.js"),
-  another = require("./views/another.js"),
+  newpost = require("./views/newpost.js"),
   body = require("./views/body.js"),
   post = require("./views/post.js"),
   tag = require("./views/tag.js"),
@@ -15,7 +15,7 @@ let request = require("superagent"),
 
 exports.routes = (
   <Route path="/" handler={shell.Shell}>
-    <Route name="another" handler={another.Another} />
+    <Route name="newpost" handler={newpost.NewPost} />
     <Route name="post" path="post/:postId" handler={post.Post} />
     <Route name="tag" path="/tag" handler={tag.Tag} />
     <DefaultRoute name="app" handler={body.Body} />

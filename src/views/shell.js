@@ -17,8 +17,8 @@ exports.Shell = React.createClass({
       </head>
       <body>
         <Link to="app">Home</Link>
-        <Link to="another">Another</Link>
-        <form action="/tag" method="GET">
+        <Link to="newpost">New Post</Link>
+        <form className="tag-search" action="/tag" method="GET">
           <input name="name" />
           <button>Tag Search</button>
         </form>
