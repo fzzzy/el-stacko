@@ -17,6 +17,7 @@ const jspath = "/js/",
   cssext = ".css",
   favicopath = "/favicon.ico",
   favicoext = ".ico",
+  newframepath = "/newframe.html",
   content_type = "Content-type",
   jstype = "application/javascript",
   csstype = "text/css",
@@ -78,6 +79,11 @@ let server = http.createServer(function (req, res) {
         res.writeHead(404); res.end(not_found);
       }
     });
+    return;
+  }
+
+  if (pth.indexOf(newframepath) === 0) {
+    res.end("newframe.html");
     return;
   }
 
@@ -147,7 +153,7 @@ let server = http.createServer(function (req, res) {
   });
 });
 
-server.listen(8080);
-console.log("server listening on http://localhost:8080/")
+server.listen(10080);
+console.log("server listening on http://localhost:10080/")
 
 
