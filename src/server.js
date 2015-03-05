@@ -120,6 +120,8 @@ let server = http.createServer(function (req, res) {
       return;
     }
 
+    console.log("App:", appnames[0].name);
+
     models[appnames[0].name](
       {method: req.method,
         path: state.path,

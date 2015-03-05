@@ -6,4 +6,12 @@ exports.main = function main() {
   });
 }
 
+exports.content = exports.main;
+exports.summary = exports.main;
+exports.tag = exports.main;
+exports.data = exports.main;
+exports.meta = exports.main;
+exports.tags = exports.main;
+exports.shot = exports.main;
+
 
