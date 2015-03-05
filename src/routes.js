@@ -6,26 +6,20 @@ let request = require("superagent"),
   Route = Router.Route,
   DefaultRoute = Router.DefaultRoute,
   shell = require("./views/shell.js"),
-  newpost = require("./views/newpost.js"),
-  body = require("./views/body.js"),
-  post = require("./views/post.js"),
-  tag = require("./views/tag.js"),
+  main = require("./views/main.js"),
   url = require("url");
 
 
 exports.routes = (
   <Route path="/" handler={shell.Shell}>
-    <Route name="newpost" handler={newpost.NewPost} />
-    <Route name="post" path="post/:postId" handler={post.Post} />
-    <Route name="tag" path="/tag" handler={tag.Tag} />
-    <DefaultRoute name="app" handler={body.Body} />
+    <DefaultRoute name="main" handler={main.Main} />
   </Route>
 );
 
 try {
   window.React = React;
-  window.shell = shell;
   window.Router = Router;
+  window.shell = shell;
   window.routes = exports;
   window.request = request;
   window.url = url;

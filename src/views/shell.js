@@ -10,18 +10,12 @@ exports.Shell = React.createClass({
     return <html>
       <head>
         <title>
-          Hello, World
+          PageShot
         </title>
         <script src="/js/bundle.js"></script>
         <link rel="stylesheet" href="/css/styles.css"></link>
       </head>
       <body>
-        <Link to="app">Home</Link>
-        <Link to="newpost">New Post</Link>
-        <form className="tag-search" action="/tag" method="GET">
-          <input name="name" />
-          <button>Tag Search</button>
-        </form>
         <RouteHandler {...this.props} />
       </body>
     </html>;
