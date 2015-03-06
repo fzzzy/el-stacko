@@ -7,22 +7,28 @@ let React = require("react"),
 
 exports.Frame = React.createClass({
   render: function () {
+    this.props.data = {};
+    this.props.meta = {};
+    if (true /* is_newpage */) {
+      this.props.new_page_script = <script src="js/newframe.js"></script>
+    }
+
     return <html>
   <head>
-    <title>{'data.get("title") or data.get("location")'}</title>
+    <title>{this.props.data["title"] || this.props.data["location"]}</title>
     <!--METAHEAD-->
-    {'meta.get("framehead")'}
+    {this.props.meta["framehead"]}
     <!--ENDHEAD-->
-    <link rel="stylesheet" href="{'base'}/css/interface.css" />
+    <link rel="stylesheet" href="css/interface.css" />
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="{'base'}/js/util.js"></script>
-    <script src="{'base'}/js/frame.js"></script>
-    <script src="{'base'}/js/login.js"></script>
-    {'if is_newpage'}
-    <script src="{'base'}/js/newframe.js"></script>
-    {'endif'}
-    <link rel="stylesheet" href="{'base'}/css/frame.css" />
-    <link rel="stylesheet" href="{'base'}/css/login.css" />
+    <script src="js/misc/util.js"></script>
+    <script src="js/misc/frame.js"></script>
+    <script src="js/misc/login.js"></script>
+
+    {this.props.new_page_script}
+
+    <link rel="stylesheet" href="css/frame.css" />
+    <link rel="stylesheet" href="css/login.css" />
     {'if data.get("favicon")'}
     <link rel="shortcut icon" href="{'data[\'favicon\']'}" />
     {'endif'}
