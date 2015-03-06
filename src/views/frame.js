@@ -7,11 +7,16 @@ let React = require("react"),
 
 exports.Frame = React.createClass({
   render: function () {
-    this.props.data = {};
+    this.props.data = {location: "http://example.com/"};
     this.props.meta = {};
     this.props.title = this.props.data.title || this.props.data.location;
     this.props.canonical_url = "";
     this.props.snippet_src = "";
+    this.props.comment = "";
+    this.props.iframe_readable_src = "";
+    this.props.iframe_src = "";
+    this.props.iframe_summarize_src = "";
+
     if (true /* is_newpage */) {
       this.props.new_page_script = <script src="js/misc/newframe.js"></script>
     } else {
@@ -37,8 +42,22 @@ exports.Frame = React.createClass({
       this.props.screenshot = <meta property="og:image" content={this.props.data.screenshot} />
 
     } else {
-      this.props.screeenshot = "";
+      this.props.screenshot = "";
     }
+
+    if (this.props.link_text) {
+      let txt = this.props.link_text;
+      if (txt.length > 50) {
+        txt = txt.slice(0, 50) + '...';
+      }
+      this.props.link_text_short = txt;
+    } else {
+      this.props.link_text_short = "";
+    }
+
+    this.props.readability_off_class = "active";
+    this.props.readability_on_class = "inactive";
+    this.props.summarize_on_class = "inactive";
 
     return <html>
   <head>
@@ -84,16 +103,18 @@ exports.Frame = React.createClass({
         </div>
 
         <div id="info">
-          <a className="sitelink" href={"data.get('location')"}>{"'' if link_text is None else (link_text if len(link_text) < 50 else link_text[:50] + '...')"}</a>
+          <a className="sitelink" href={this.props.data.location}>{this.props.link_text_short}</a>
           <span id="clip"><img title="Copy shareable link to the clipboard"
-                               src="{'base'}/clipboard-8-xl.png" stylee="height: 1em;" /></span>
+                               src="img/clipboard-8-xl.png" stylee="height: 1em;" /></span>
           <span id="readable-toggler">
-            <span id="readability-off" className={"'active' if not readable and not summarize else 'inactive'"}>normal</span>{'if data.get("readable")'}<span id="readability-on" className={"'active' if readable and not summarize else 'inactive'"}>readable</span>{'endif'}<span id="summarize-on" className={"'active' if summarize else 'inactive'"}>summarize</span>
+            <span id="readability-off" className={this.props.readability_off_class}>normal</span>
+            <span id="readability-on" className={this.props.readability_on_class}>readable</span>
+            <span id="summarize-on" className={this.props.summarize_on_class}>summarize</span>
           </span>
         </div>
   
         <div id="comment-container" stylee="display: none">
-          <div id="comment">{"html(comment)"}</div>
+          <div id="comment">{this.props.comment}</div>
           <div stylee="display: none" id="comment-editor-container">
             <textarea id="comment-editor"></textarea>
           </div>
@@ -101,10 +122,10 @@ exports.Frame = React.createClass({
         </div><!-- /#comment-container -->
       </div>
       <div id="frame-wrapper" className="drop-shadow">
-        <iframe id="frame" height="100%" width="100%" src={"iframe_readable_src if readable else iframe_src"} data-normal-src={"iframe_src"} data-readable-src={"iframe_readable_src"}></iframe>
+        <iframe id="frame" height="100%" width="100%" src={this.props.iframe_readable_src} data-normal-src={this.props.iframe_src} data-readable-src={this.props.iframe_readable_src}></iframe>
       </div>
     </div>
-    <iframe id="summary" className="hidden no-drop-shadow" height="100%" width="100%" src={"iframe_summarize_src"} data-summarize-src={"iframe_summarize_src"}></iframe>
+    <iframe id="summary" className="hidden no-drop-shadow" height="100%" width="100%" src={this.props.iframe_summarize_src} data-summarize-src={this.props.iframe_summarize_src}></iframe>
   </body>
 </html>;
 

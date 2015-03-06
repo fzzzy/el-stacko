@@ -14,12 +14,15 @@ const jspath = "/js/",
   jsext = ".js",
   csspath = "/css/",
   modelspath = "/models/",
+  imgpath = "/img/",
+  imgext = ".png",
   cssext = ".css",
   favicopath = "/favicon.ico",
   favicoext = ".ico",
   content_type = "Content-type",
   jstype = "application/javascript",
   csstype = "text/css",
+  imgtype = "image/png",
   favicotype = "image/x-icon",
   jsontype = "application/json",
   accept = "Accept",
@@ -63,7 +66,7 @@ let server = http.createServer(function (req, res) {
 
   console.log(req.method, pth, query);
 
-  if (req.method === "GET" && (pth.indexOf(jspath) === 0 || pth.indexOf(csspath) === 0 || pth === favicopath)) {
+  if (req.method === "GET" && (pth.indexOf(jspath) === 0 || pth.indexOf(csspath) === 0 || pth.indexOf(imgpath) === 0 || pth === favicopath)) {
     let filename = path.join(__dirname, pth);
     fs.exists(filename, function(exists) {
       if (exists) {
@@ -71,6 +74,8 @@ let server = http.createServer(function (req, res) {
           res.setHeader(content_type, jstype);
         } else if (filename.endsWith(cssext)) {
           res.setHeader(content_type, csstype);
+        } else if (filename.endsWith(imgext)) {
+          res.setHeader(content_type, imgtype);
         } else if (filename.endsWith(favicoext)) {
           res.setHeader(content_type, favicotype);
         }

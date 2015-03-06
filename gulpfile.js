@@ -14,6 +14,10 @@ gulp.task("sass", function () {
   return gulp.src("src/**/*.scss").pipe(sass()).pipe(gulp.dest("dist/css"));
 });
 
+gulp.task("imgs", function () {
+  return gulp.src("src/img/*").pipe(gulp.dest("dist/img"));
+});
+
 gulp.task("javascript", ["6to5"], function () {
   var bundler = browserify({
     entries: ["./dist/routes.js"],
@@ -25,6 +29,6 @@ gulp.task("javascript", ["6to5"], function () {
   }());
 });
 
-gulp.task("default", ["sass", "javascript"]);
+gulp.task("default", ["sass", "javascript", "imgs"]);
 
 
