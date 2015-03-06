@@ -17,7 +17,6 @@ const jspath = "/js/",
   cssext = ".css",
   favicopath = "/favicon.ico",
   favicoext = ".ico",
-  newframepath = "/newframe.html",
   content_type = "Content-type",
   jstype = "application/javascript",
   csstype = "text/css",
@@ -25,6 +24,7 @@ const jspath = "/js/",
   jsontype = "application/json",
   accept = "Accept",
   not_found = "Not Found",
+  doctype = "<!DOCTYPE html>",
   footer = "</body></html>",
   script = `
 function got_data(Handler, data) {
@@ -82,11 +82,6 @@ let server = http.createServer(function (req, res) {
     return;
   }
 
-  if (pth.indexOf(newframepath) === 0) {
-    res.end("newframe.html");
-    return;
-  }
-
   if (pth.indexOf(modelspath) === 0) {
     let modelname = pth.slice(modelspath.length);
     let subpath = {};
@@ -140,6 +135,7 @@ let server = http.createServer(function (req, res) {
   
         res.setHeader(content_type, "text/html; charset=utf-8");
         res.end(
+          doctype +
           header +
           "<script>var cached_data = " + JSON.stringify(data) + ";" +
           script +

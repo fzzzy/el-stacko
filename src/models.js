@@ -13,5 +13,5 @@ exports.data = exports.main;
 exports.meta = exports.main;
 exports.tags = exports.main;
 exports.shot = exports.main;
-
+exports.newframe = exports.main;
 

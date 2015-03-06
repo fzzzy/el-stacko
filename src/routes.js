@@ -5,10 +5,10 @@ let request = require("superagent"),
   Router = require("react-router"),
   Route = Router.Route,
   DefaultRoute = Router.DefaultRoute,
+  url = require("url"),
   shell = require("./views/shell.js"),
   main = require("./views/main.js"),
-  url = require("url");
-
+  frame = require("./views/frame.js");
 
 /*
 Shot view: /{random/domainName}
@@ -32,6 +32,7 @@ exports.routes = (
     <Route name="meta" path="meta/:metaId" handler={main.Main} />
     <Route name="tags" path="tags-for/:tagsId" handler={main.Main} />
     <Route name="shot" path=":shotId/:shotDomain" handler={main.Main} />
+    <Route name="newframe" path="/newframe.html" handler={frame.Frame} />
     <DefaultRoute name="main" handler={main.Main} />
   </Route>
 );
