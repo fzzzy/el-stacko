@@ -9,15 +9,42 @@ exports.Frame = React.createClass({
   render: function () {
     this.props.data = {};
     this.props.meta = {};
+    this.props.title = this.props.data.title || this.props.data.location;
+    this.props.canonical_url = "";
+    this.props.snippet_src = "";
     if (true /* is_newpage */) {
-      this.props.new_page_script = <script src="js/newframe.js"></script>
+      this.props.new_page_script = <script src="js/misc/newframe.js"></script>
+    } else {
+      this.props.new_page_script = "";
+    }
+    if (true /*data.get('favicon')*/) {
+      this.props.favicon = <link rel="shortcut icon" href={this.props.data.favicon} />;
+    } else {
+      this.props.favicon = "";
+    }
+    
+    if (this.props.meta.snippet !== undefined) {
+      this.props.snippet = <div>
+        <meta property="og:image" id="meta-snippet" content={this.props.snippet_src} />
+        <meta property="og:image:type" content="image/png" />
+      </div>;
+    } else {
+      this.props.snippet = "";
+    }
+
+    if (this.props.data.screenshot !== undefined) {
+      // FIXME: must be a url
+      this.props.screenshot = <meta property="og:image" content={this.props.data.screenshot} />
+
+    } else {
+      this.props.screeenshot = "";
     }
 
     return <html>
   <head>
-    <title>{this.props.data["title"] || this.props.data["location"]}</title>
+    <title>{this.props.title}</title>
     <!--METAHEAD-->
-    {this.props.meta["framehead"]}
+    {this.props.meta.framehead}
     <!--ENDHEAD-->
     <link rel="stylesheet" href="css/interface.css" />
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -29,22 +56,16 @@ exports.Frame = React.createClass({
 
     <link rel="stylesheet" href="css/frame.css" />
     <link rel="stylesheet" href="css/login.css" />
-    {'if data.get("favicon")'}
-    <link rel="shortcut icon" href="{'data[\'favicon\']'}" />
-    {'endif'}
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content={'data.get("title") or data.get("location")'} />
-    <meta property="og:url" content={'canonical_url'} />
 
-    {"if meta.get('snippet')"}
-    <meta property="og:image" id="meta-snippet" content="{'snippet_src'}" />
-    <meta property="og:image:type" content="image/png" />
-    {'endif'}
-    <!-- FIXME: must be a URL
-    {'if data.get("screenshot")'}
-    <meta property="og:image" content={"data['screenshot']"} />
-    {'endif'}
-    -->
+    {this.props.favicon}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={this.props.title} />
+    <meta property="og:url" content={this.props.canonical_url} />
+
+    {this.props.snippet}
+
+    {this.props.screenshot}
   </head>
   <body>
     <div id="container">
