@@ -14,6 +14,7 @@ const jspath = "/js/",
   jsext = ".js",
   csspath = "/css/",
   modelspath = "/data/",
+  metapath = "/meta/",
   imgpath = "/img/",
   imgext = ".png",
   cssext = ".css",
@@ -59,7 +60,8 @@ Router.run(routes.routes, Router.HistoryLocation, function (Handler, state) {
 });
 `;
 
-let model_map = new Map();
+let model_map = new Map(),
+  meta_map = new Map();
 
 let server = http.createServer(function (req, res) {
   let parsed = url.parse(req.url, true),
@@ -88,9 +90,17 @@ let server = http.createServer(function (req, res) {
     });
     return;
   }
+  let modelname = "",
+    store_map = null;
 
   if (pth.indexOf(modelspath) === 0) {
-    let modelname = pth.slice(modelspath.length);
+    modelname = pth.slice(modelspath.length);
+    store_map = model_map;
+  } else if (pth.indexOf(metapath) === 0) {
+    modelname = pth.slice(metapath.length);
+    store_map = meta_map;
+  }
+  if (modelname) {
     if (req.method === "PUT") {
       let body = "";
       req.on('data', function(chunk) {
@@ -98,13 +108,13 @@ let server = http.createServer(function (req, res) {
       });
       req.on('end', function() {
         if (body.length && body[0] === "{") {
-          model_map[modelname] = JSON.parse(body);
+          store_map[modelname] = JSON.parse(body);
         }
         res.end();
       });
     } else if (req.method === 'GET') {
-      if (model_map.has(modelname)) {
-        res.end(JSON.stringify(model_map[modelname]));
+      if (store_map.has(modelname)) {
+        res.end(JSON.stringify(store_map[modelname]));
       } else {
         res.writeHead(404);
         res.end(not_found);
