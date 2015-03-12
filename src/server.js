@@ -7,13 +7,12 @@ let http = require("http"),
   React = require("react"),
   Router = require("react-router"),
   routes = require("./routes.js"),
-  models = require("./models.js"),
   request = require("superagent");
 
 const jspath = "/js/",
   jsext = ".js",
   csspath = "/css/",
-  modelspath = "/models/",
+  modelspath = "/data/",
   imgpath = "/img/",
   imgext = ".png",
   cssext = ".css",
@@ -59,6 +58,8 @@ Router.run(routes.routes, Router.HistoryLocation, function (Handler, state) {
 });
 `;
 
+let models = new Map();
+
 let server = http.createServer(function (req, res) {
   let parsed = url.parse(req.url, true),
     pth = parsed.pathname,
@@ -89,32 +90,28 @@ let server = http.createServer(function (req, res) {
 
   if (pth.indexOf(modelspath) === 0) {
     let modelname = pth.slice(modelspath.length);
-    let subpath = {};
-    if (query.path === undefined) {
-      subpath.pathname = pth;
-      subpath.query = {};
-    } else {
-      subpath = url.parse(query.path + "?" + query.query, true);
-    }
-    let body = "";
-    req.on('data', function(chunk) {
-      body = body + chunk;
-    });
-    req.on('end', function() {
-      if (body.length && body[0] === "{") {
-        body = JSON.parse(body);
-      }
-      models[modelname](
-        {method: req.method,
-          path: subpath.pathname,
-          query: subpath.query,
-          body: body}
-      ).then(function (data) {
-        res.setHeader(content_type, jsontype);
-        res.end(JSON.stringify(data));
+    if (req.method === "PUT") {
+      let body = "";
+      req.on('data', function(chunk) {
+        body = body + chunk;
       });
-    });
-    return;
+      req.on('end', function() {
+        if (body.length && body[0] === "{") {
+          models[modelname] = JSON.parse(body);
+        }
+        res.end();
+      });
+    } else if (req.method === 'GET') {
+      if (models.has(modelname)) {
+        res.end(JSON.stringify(models[modelname]));
+      } else {
+        res.writeHead(404);
+        res.end(not_found);
+      }
+    } else {
+      res.writeHead(405);
+      res.end("Method Not Allowed");
+    }
   }
 
   Router.run(routes.routes, req.url, function (Handler, state) {
@@ -150,7 +147,7 @@ let server = http.createServer(function (req, res) {
         res.setHeader(content_type, "text/plain; charset=utf-8");
         res.end(e.stack);
       }
-    })
+    });
   });
 });
 
