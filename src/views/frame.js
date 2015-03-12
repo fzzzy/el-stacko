@@ -18,7 +18,7 @@ exports.Frame = React.createClass({
     this.props.iframe_summarize_src = "";
 
     if (true /* is_newpage */) {
-      this.props.new_page_script = <script src="js/misc/newframe.js"></script>
+      this.props.new_page_script = <script src="/js/misc/newframe.js"></script>
     } else {
       this.props.new_page_script = "";
     }
@@ -65,16 +65,16 @@ exports.Frame = React.createClass({
     <!--METAHEAD-->
     {this.props.meta.framehead}
     <!--ENDHEAD-->
-    <link rel="stylesheet" href="css/interface.css" />
+    <link rel="stylesheet" href="/css/interface.css" />
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="js/misc/util.js"></script>
-    <script src="js/misc/frame.js"></script>
-    <script src="js/misc/login.js"></script>
+    <script src="/js/misc/util.js"></script>
+    <script src="/js/misc/frame.js"></script>
+    <script src="/js/misc/login.js"></script>
 
     {this.props.new_page_script}
 
-    <link rel="stylesheet" href="css/frame.css" />
-    <link rel="stylesheet" href="css/login.css" />
+    <link rel="stylesheet" href="/css/frame.css" />
+    <link rel="stylesheet" href="/css/login.css" />
 
     {this.props.favicon}
 
@@ -105,7 +105,7 @@ exports.Frame = React.createClass({
         <div id="info">
           <a className="sitelink" href={this.props.data.location}>{this.props.link_text_short}</a>
           <span id="clip"><img title="Copy shareable link to the clipboard"
-                               src="img/clipboard-8-xl.png" stylee="height: 1em;" /></span>
+                               src="/img/clipboard-8-xl.png" stylee="height: 1em;" /></span>
           <span id="readable-toggler">
             <span id="readability-off" className={this.props.readability_off_class}>normal</span>
             <span id="readability-on" className={this.props.readability_on_class}>readable</span>
