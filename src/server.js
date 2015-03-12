@@ -7,6 +7,7 @@ let http = require("http"),
   React = require("react"),
   Router = require("react-router"),
   routes = require("./routes.js"),
+  models = require("./models.js"),
   request = require("superagent");
 
 const jspath = "/js/",
@@ -58,7 +59,7 @@ Router.run(routes.routes, Router.HistoryLocation, function (Handler, state) {
 });
 `;
 
-let models = new Map();
+let model_map = new Map();
 
 let server = http.createServer(function (req, res) {
   let parsed = url.parse(req.url, true),
@@ -97,13 +98,13 @@ let server = http.createServer(function (req, res) {
       });
       req.on('end', function() {
         if (body.length && body[0] === "{") {
-          models[modelname] = JSON.parse(body);
+          model_map[modelname] = JSON.parse(body);
         }
         res.end();
       });
     } else if (req.method === 'GET') {
-      if (models.has(modelname)) {
-        res.end(JSON.stringify(models[modelname]));
+      if (model_map.has(modelname)) {
+        res.end(JSON.stringify(model_map[modelname]));
       } else {
         res.writeHead(404);
         res.end(not_found);
@@ -112,6 +113,7 @@ let server = http.createServer(function (req, res) {
       res.writeHead(405);
       res.end("Method Not Allowed");
     }
+    return;
   }
 
   Router.run(routes.routes, req.url, function (Handler, state) {
