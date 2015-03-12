@@ -28,7 +28,6 @@ exports.routes = (
     <Route name="content" path="content/:contentId" handler={main.Main} />
     <Route name="summary" path="summary/:summaryId" handler={main.Main} />
     <Route name="tag" path="tag/:tagId" handler={main.Main} />
-    <Route name="data" path="data/:dataId/xxx" handler={main.Main} />
     <Route name="meta" path="meta/:metaId" handler={main.Main} />
     <Route name="tags" path="tags-for/:tagsId" handler={main.Main} />
     <Route name="shot" path=":shotId/:shotDomain" handler={main.Main} />
