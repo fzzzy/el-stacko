@@ -4,7 +4,8 @@ var browserify = require("browserify"),
   gulp = require("gulp"),
   to5 = require("gulp-6to5"),
   sass = require("gulp-sass"),
-  source = require("vinyl-source-stream");
+  source = require("vinyl-source-stream"),
+  nodemon = require("gulp-nodemon");
 
 gulp.task("6to5", function () {
   return gulp.src("src/**/*.{js,jsx}").pipe(to5()).pipe(gulp.dest("dist"));
@@ -29,6 +30,14 @@ gulp.task("javascript", ["6to5"], function () {
   }());
 });
 
-gulp.task("default", ["sass", "javascript", "imgs"]);
+gulp.task("transforms", ["sass", "javascript", "imgs"]);
+
+gulp.task("default", ["transforms"], function () {
+  var n = nodemon({ script: 'run', ignore: ["dist"] });
+  n.on('change', ["transforms"])
+  n.on('restart', function () {
+    console.log('restarted!')
+  });
+});
 
 
