@@ -14,7 +14,6 @@ exports.Shell = React.createClass({
         </title>
         <script src="/js/bundle.js" />
         <link rel="stylesheet" href="/css/styles.css" />
-        <link rel="stylesheet" href="/css/frame.css" />
         <link rel="stylesheet" href="/css/login.css" />
       </head>
       <body>

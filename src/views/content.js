@@ -11,7 +11,7 @@ exports.Content = React.createClass({
     return <div>
       <div dangerouslySetInnerHTML={{__html: this.props.data.head}}>
       </div>
-      <div id="container" dangerouslySetInnerHTML={{__html: this.props.data.body}}>
+      <div className="white-background" dangerouslySetInnerHTML={{__html: this.props.data.body}}>
       </div>
     </div>
   }

@@ -7,11 +7,6 @@ let React = require("react"),
 
 exports.Frame = React.createClass({
   render: function () {
-/*
-    this.props.canonical_url = "";
-    this.props.snippet_src = "";
-    this.props.comment = "";
-*/
     if (this.props.data.favicon) {
       this.props.favicon = <link rel="shortcut icon" href={this.props.data.favicon} />;
     } else {
@@ -35,8 +30,9 @@ exports.Frame = React.createClass({
       this.props.screenshot = "";
     }
 
-    if (this.props.data.link_text) {
-      let txt = this.props.data.link_text;
+    console.log(Object.getOwnPropertyNames(this.props.data));
+    if (this.props.data.location) {
+      let txt = this.props.data.location;
       if (txt.length > 50) {
         txt = txt.slice(0, 50) + '...';
       }
@@ -49,10 +45,14 @@ exports.Frame = React.createClass({
       {this.props.favicon}
       {this.props.snippet}
       {this.props.screenshot}
-      <div id="topbar">topbar {this.props.link_text_short}</div>
+      <div id="toolbar">
+        <a href={this.props.data.location}>
+          {this.props.link_text_short}
+        </a>
+      </div>
       <h1>{this.props.data.title || this.props.data.location}</h1>
 
-      <iframe src={"/content/" + this.props.identifier} />
+      <iframe width="100%" id="frame" src={"/content/" + this.props.identifier} />
     </div>
   }
 });
