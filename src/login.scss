@@ -1,7 +1,9 @@
 
 
 #login-widget {
-  display: inline-block;
+  position: absolute;
+  top: 5px;
+  left: 0px;
 }
 
 #login-widget.logged-in .if-logged-out {
@@ -25,6 +27,7 @@
 }
 
 #login-dropped {
+  display: none;
   position: absolute;
   top: 26px;
   height: 90px;
