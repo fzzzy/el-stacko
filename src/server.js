@@ -49,7 +49,6 @@ Router.run(routes.routes, Router.HistoryLocation, function (Handler, state) {
     querystring += n + "=" + state.query[n] + "&";
   }
   querystring = querystring.slice(0, querystring.length - 1);
-  console.log("path query", state.pathname, querystring);
   request.get(
     url.format({pathname: "/models/" + appname, query: {path: state.pathname, query: querystring}})
   ).set(
@@ -96,11 +95,9 @@ let server = http.createServer(function (req, res) {
   if (pth.indexOf(modelspath) === 0) {
     modelname = pth.slice(modelspath.length);
     store_map = model_map;
-    console.log("store model map");
   } else if (pth.indexOf(metapath) === 0) {
     modelname = pth.slice(metapath.length);
     store_map = meta_map;
-    console.log("store meta map");
   }
   if (modelname) {
     if (req.method === "PUT") {
@@ -111,19 +108,12 @@ let server = http.createServer(function (req, res) {
       req.on('end', function() {
         if (body.length && body[0] === "{") {
           let val = JSON.parse(body);
-          console.log("keys", pth, store_map.keys());
           if (!store_map.has(modelname)) {
             store_map.set(modelname, {});
-            console.log("asdfdasdf", store_map.keys());
           }
           for (let key in val) {
-            console.log("key", key, typeof val[key]);
             store_map.get(modelname)[key] = val[key];
           }
-          console.log(Object.getOwnPropertyNames(val));
-          console.log("body length", val.body && val.body.length);
-          console.log("captured", val.captured);
-
         }
         res.end();
       });
