@@ -96,9 +96,11 @@ let server = http.createServer(function (req, res) {
   if (pth.indexOf(modelspath) === 0) {
     modelname = pth.slice(modelspath.length);
     store_map = model_map;
+    console.log("store model map");
   } else if (pth.indexOf(metapath) === 0) {
     modelname = pth.slice(metapath.length);
     store_map = meta_map;
+    console.log("store meta map");
   }
   if (modelname) {
     if (req.method === "PUT") {
@@ -108,13 +110,26 @@ let server = http.createServer(function (req, res) {
       });
       req.on('end', function() {
         if (body.length && body[0] === "{") {
-          store_map[modelname] = JSON.parse(body);
+          let val = JSON.parse(body);
+          console.log("keys", pth, store_map.keys());
+          if (!store_map.has(modelname)) {
+            store_map.set(modelname, {});
+            console.log("asdfdasdf", store_map.keys());
+          }
+          for (let key in val) {
+            console.log("key", key, typeof val[key]);
+            store_map.get(modelname)[key] = val[key];
+          }
+          console.log(Object.getOwnPropertyNames(val));
+          console.log("body length", val.body && val.body.length);
+          console.log("captured", val.captured);
+
         }
         res.end();
       });
     } else if (req.method === 'GET') {
       if (store_map.has(modelname)) {
-        res.end(JSON.stringify(store_map[modelname]));
+        res.end(JSON.stringify(store_map.get(modelname)));
       } else {
         res.writeHead(404);
         res.end(not_found);
@@ -140,7 +155,10 @@ let server = http.createServer(function (req, res) {
     models[appnames[0].name](
       {method: req.method,
         path: state.path,
-        query: state.query}
+        params: state.params,
+        query: state.query,
+        model_map: model_map,
+        meta_map: meta_map}
     ).then(function (data) {
       try {
         let response = React.renderToString(<Handler {...data} />),

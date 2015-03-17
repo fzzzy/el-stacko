@@ -12,8 +12,10 @@ exports.Shell = React.createClass({
         <title>
           PageShot
         </title>
-        <script src="/js/bundle.js"></script>
-        <link rel="stylesheet" href="/css/styles.css"></link>
+        <script src="/js/bundle.js" />
+        <link rel="stylesheet" href="/css/styles.css" />
+        <link rel="stylesheet" href="/css/frame.css" />
+        <link rel="stylesheet" href="/css/login.css" />
       </head>
       <body>
         <RouteHandler {...this.props} />

@@ -8,7 +8,8 @@ let request = require("superagent"),
   url = require("url"),
   shell = require("./views/shell.js"),
   main = require("./views/main.js"),
-  frame = require("./views/frame.js");
+  frame = require("./views/frame.js"),
+  content = require("./views/content.js");
 
 /*
 Shot view: /{random/domainName}
@@ -25,7 +26,7 @@ Tags: /tags-for/{id} - list of tags on the page, GET and PUT a JSON list
 
 exports.routes = (
   <Route path="/" handler={shell.Shell}>
-    <Route name="content" path="content/:contentId" handler={main.Main} />
+    <Route name="content" path="content/:contentId/:contentDomain" handler={content.Content} />
     <Route name="summary" path="summary/:summaryId" handler={main.Main} />
     <Route name="tag" path="tag/:tagId" handler={main.Main} />
     <Route name="meta" path="meta/:metaId" handler={main.Main} />
