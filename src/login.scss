@@ -2,8 +2,10 @@
 
 #login-widget {
   position: absolute;
-  top: 5px;
-  left: 0px;
+  top: 0.5em;
+  right: 0.5em;
+  width: 1.5em;
+  height: 1.5em;
 }
 
 #login-widget.logged-in .if-logged-out {

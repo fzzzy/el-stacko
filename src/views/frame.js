@@ -71,7 +71,7 @@ exports.Frame = React.createClass({
           <img src="/img/clipboard-8-xl.png" />
         </a>
       </div>
-      <h1>{this.props.data.title || this.props.data.location}</h1>
+      <h1 id="main-title">{this.props.data.title || this.props.data.location}</h1>
       <img src={this.props.meta.snippet} style={{width: "100%"}} />
       <iframe width="100%" id="frame" src={"/content/" + this.props.identifier} />
     </div>
