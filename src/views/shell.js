@@ -13,7 +13,7 @@ exports.Shell = React.createClass({
           PageShot
         </title>
         <script src="/js/bundle.js" />
-        <link rel="stylesheet" href="/css/main.css" />
+        <link rel="stylesheet" href="/css/styles.css" />
         <link rel="stylesheet" href="/css/login.css" />
       </head>
       <body>
