@@ -1,10 +1,13 @@
 
 
-let user = process.env['USER'],
+let user = process.env["DB_USER"] || process.env["USER"],
+  pass = process.env["DB_PASS"],
   host = process.env['DB_HOST'] || "localhost";
 
+pass = (pass && ":" + pass) || "";
+
 let pg = require("pg"),
-  constr = `postgres://${user}@${host}/${user}`;
+  constr = `postgres://${user}${pass}@${host}/${user}`;
 
 function get_connection() {
   return new Promise(function (resolve, reject) {
