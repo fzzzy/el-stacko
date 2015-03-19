@@ -59,9 +59,6 @@ Router.run(routes.routes, Router.HistoryLocation, function (Handler, state) {
 });
 `;
 
-let model_map = new Map(),
-  meta_map = new Map();
-
 let server = http.createServer(function (req, res) {
   let parsed = url.parse(req.url, true),
     pth = parsed.pathname,
@@ -94,10 +91,10 @@ let server = http.createServer(function (req, res) {
 
   if (pth.indexOf(modelspath) === 0) {
     modelname = pth.slice(modelspath.length);
-    store_map = model_map;
+    store_map = models.model_map;
   } else if (pth.indexOf(metapath) === 0) {
     modelname = pth.slice(metapath.length);
-    store_map = meta_map;
+    store_map = models.meta_map;
   }
   if (modelname) {
     if (req.method === "PUT") {
@@ -107,23 +104,18 @@ let server = http.createServer(function (req, res) {
       });
       req.on('end', function() {
         if (body.length && body[0] === "{") {
-          let val = JSON.parse(body);
-          if (!store_map.has(modelname)) {
-            store_map.set(modelname, {});
-          }
-          for (let key in val) {
-            store_map.get(modelname)[key] = val[key];
-          }
+          store_map.put(modelname, body).then(() => res.end());
         }
-        res.end();
       });
     } else if (req.method === 'GET') {
-      if (store_map.has(modelname)) {
-        res.end(JSON.stringify(store_map.get(modelname)));
-      } else {
-        res.writeHead(404);
-        res.end(not_found);
-      }
+      store_map.get(modelname).then((val) => {
+        if (val === null) {
+          res.writeHead(404);
+          res.end(not_found);
+        } else {
+          res.end(val);
+        }
+      });
     } else {
       res.writeHead(405);
       res.end("Method Not Allowed");
@@ -146,9 +138,7 @@ let server = http.createServer(function (req, res) {
       {method: req.method,
         path: state.path,
         params: state.params,
-        query: state.query,
-        model_map: model_map,
-        meta_map: meta_map}
+        query: state.query}
     ).then(function (data) {
       try {
         let response = React.renderToString(<Handler {...data} />),

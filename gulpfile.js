@@ -33,10 +33,14 @@ gulp.task("javascript", ["6to5"], function () {
 gulp.task("transforms", ["sass", "javascript", "imgs"]);
 
 gulp.task("default", ["transforms"], function () {
-  var n = nodemon({ script: 'run', ignore: ["dist"] });
-  n.on('change', ["transforms"])
-  n.on('restart', function () {
-    console.log('restarted!')
+  nodemon({
+    script: "run",
+    ignore: ["dist"],
+    ext: ["js scss"],
+    tasks: function (changed) {
+      console.log("changed files!");
+      return ["transforms"];
+    }
   });
 });
 

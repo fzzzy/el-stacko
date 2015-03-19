@@ -7,6 +7,10 @@ let React = require("react"),
 
 exports.Frame = React.createClass({
   render: function () {
+    if (this.props.data === null) {
+      return <div>Not Found</div>;
+    }
+
     if (this.props.data.favicon) {
       this.props.favicon = <link rel="shortcut icon" href={this.props.data.favicon} />;
     } else {
@@ -30,8 +34,8 @@ exports.Frame = React.createClass({
       this.props.screenshot = "";
     }
 
-    console.log(Object.getOwnPropertyNames(this.props.data));
-    console.log(Object.getOwnPropertyNames(this.props.meta));
+//    console.log(Object.getOwnPropertyNames(this.props.data));
+//    console.log(Object.getOwnPropertyNames(this.props.meta));
     if (this.props.data.location) {
       let txt = this.props.data.location;
       if (txt.length > 50) {
@@ -47,19 +51,19 @@ exports.Frame = React.createClass({
       {this.props.snippet}
       {this.props.screenshot}
       <div id="toolbar">
-        <div class="logged-out" id="login-widget">
-          <div id="login-dropdown" class="login-collapsed">
+        <div className="logged-out" id="login-widget">
+          <div id="login-dropdown" className="login-collapsed">
             <div id="login-compact">
-              <img src="https://pageshotpages.appspot.com/static/default-profile.svg" id="login-drop" class="user-avatar" style={{height: "20px", width: "20px"}} />
+              <img src="https://pageshotpages.appspot.com/static/default-profile.svg" id="login-drop" className="user-avatar" style={{height: "20px", width: "20px"}} />
             </div>
             <div id="login-dropped">
-              <img src="https://pageshotpages.appspot.com/static/default-profile.svg" class="user-avatar" style={{height: "50px", width: "50px"}} />
-              <div class="if-logged-in">
-                <span class="user-email">-</span>
+              <img src="https://pageshotpages.appspot.com/static/default-profile.svg" className="user-avatar" style={{height: "50px", width: "50px"}} />
+              <div className="if-logged-in">
+                <span className="user-email">-</span>
                 <br />
                 <span id="logout">logout</span>
               </div>
-              <div class="if-logged-out">
+              <div className="if-logged-out">
                 Log in:
                 <input id="log-in-email" placeholder="email" type="text" />
               </div>
