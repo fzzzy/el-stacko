@@ -3,7 +3,6 @@
 let user = process.env['USER'],
   host = process.env['DB_HOST'] || "localhost";
 
-
 let pg = require("pg"),
   constr = `postgres://${user}@${host}/${user}`;
 

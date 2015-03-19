@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-require("6to5/polyfill");
+require("babel/polyfill");
 
 require("./dist/server.js");

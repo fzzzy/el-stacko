@@ -2,7 +2,7 @@
 
 var browserify = require("browserify"),
   gulp = require("gulp"),
-  to5 = require("gulp-6to5"),
+  to5 = require("gulp-babel"),
   sass = require("gulp-sass"),
   source = require("vinyl-source-stream"),
   nodemon = require("gulp-nodemon");
@@ -36,11 +36,8 @@ gulp.task("default", ["transforms"], function () {
   nodemon({
     script: "run",
     ignore: ["dist"],
-    ext: ["js scss"],
-    tasks: function (changed) {
-      console.log("changed files!");
-      return ["transforms"];
-    }
+    ext: "js scss",
+    tasks: ["transforms"]
   });
 });
 
